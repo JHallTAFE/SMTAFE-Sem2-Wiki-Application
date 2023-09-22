@@ -259,6 +259,7 @@
             Name = "WikiApp";
             SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             Text = "Wiki Application";
+            Load += WikiApp_Load;
             GroupBoxStructure.ResumeLayout(false);
             GroupBoxStructure.PerformLayout();
             ResumeLayout(false);
