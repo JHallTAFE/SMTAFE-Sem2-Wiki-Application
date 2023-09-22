@@ -60,7 +60,7 @@ namespace Wiki_Application
         }
         public int CompareTo(Information info)
         {
-            throw new System.NotImplementedException();
+            return _name.CompareTo(info._name);
         }
     }
 }
