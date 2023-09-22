@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Wiki_Application
 {
+    // Programming Criteria 6.1
     public class Information : IComparable<Information>
     {
         private string _name;
