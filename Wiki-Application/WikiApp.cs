@@ -26,14 +26,17 @@ namespace Wiki_Application
         // Programming Criteria 6.3
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
-            // To-do: Add input validation
-            string name = TextBoxName.Text.ToString();
-            string category = ComboBoxCategory.Text.ToString();
-            string structure = GetStructure();
-            string definition = TextBoxDefinition.Text.ToString();
-            var newInfo = new Information(name, category, structure, definition);
-            Wiki.Add(newInfo);
-            DisplayWiki();
+            if (ValidName(TextBoxName.Text))
+            {
+                string name = TextBoxName.Text.ToString();
+                string category = ComboBoxCategory.Text.ToString();
+                string structure = GetStructure();
+                string definition = TextBoxDefinition.Text.ToString();
+                var newInfo = new Information(name, category, structure, definition);
+                Wiki.Add(newInfo);
+                DisplayWiki();
+            }
+            else MessageBox.Show("Cannot add " + TextBoxName.Text + " as it already exists!");
             // To-do: Clear boxes
         }
         private void DisplayWiki()
@@ -154,16 +157,20 @@ namespace Wiki_Application
         private void ButtonEdit_Click(object sender, EventArgs e)
         {
             // To-do: validate name inputs for duplicates and other validation checks
-            if (ListViewInfo.FocusedItem != null)
+            if (ValidName(TextBoxName.Text))
             {
-                var i = ListViewInfo.FocusedItem.Index;
-                Wiki[i].SetName(TextBoxName.Text);
-                Wiki[i].SetCategory(ComboBoxCategory.Text);
-                Wiki[i].SetStructure(GetStructure());
-                Wiki[i].SetDefinition(TextBoxDefinition.Text);
-                DisplayWiki();
-                // To-do: clear boxes and status strip feedback
+                if (ListViewInfo.FocusedItem != null)
+                {
+                    var i = ListViewInfo.FocusedItem.Index;
+                    Wiki[i].SetName(TextBoxName.Text);
+                    Wiki[i].SetCategory(ComboBoxCategory.Text);
+                    Wiki[i].SetStructure(GetStructure());
+                    Wiki[i].SetDefinition(TextBoxDefinition.Text);
+                    DisplayWiki();
+                    // To-do: clear boxes and status strip feedback
+                }
             }
+            else MessageBox.Show("Cannot change entry name to " + TextBoxName.Text + " as it already exists!");
         }
         // Programming Criteria 6.10
         private void ButtonSearch_Click(object sender, EventArgs e)
@@ -195,6 +202,15 @@ namespace Wiki_Application
                 e.Handled = true;
                 e.SuppressKeyPress = true;
             }
+        }
+        // Programming Criteria 6.5
+        private bool ValidName(string input)
+        {
+            if (Wiki.Exists(info => info.GetName().Equals(input, StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
