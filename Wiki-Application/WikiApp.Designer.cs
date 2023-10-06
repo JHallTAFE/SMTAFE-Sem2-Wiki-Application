@@ -63,6 +63,7 @@
             ListViewInfo.TabIndex = 0;
             ListViewInfo.UseCompatibleStateImageBehavior = false;
             ListViewInfo.View = System.Windows.Forms.View.Details;
+            ListViewInfo.SelectedIndexChanged += ListViewInfo_SelectedIndexChanged;
             // 
             // columnName
             // 

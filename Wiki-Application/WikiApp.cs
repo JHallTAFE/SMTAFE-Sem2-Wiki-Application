@@ -35,6 +35,7 @@ namespace Wiki_Application
             var newInfo = new Information(name, category, structure, definition);
             Wiki.Add(newInfo);
             DisplayWiki();
+            // To-do: Clear boxes
         }
         private void DisplayWiki()
         {
@@ -118,7 +119,36 @@ namespace Wiki_Application
                     Wiki.RemoveAt(selectedItem);
                     DisplayWiki();
                     // TO DO: Status Strip feedback
+                    // Also clear boxes
                 }
+            }
+        }
+        // Programming Criteria 6.11 Part A
+        private void DisplayInformation(int i)
+        {
+            if (0 <= i && i < Wiki.Count) // If input in range of List<>
+            {
+                TextBoxName.Text = Wiki[i].GetName();
+                ComboBoxCategory.Text = Wiki[i].GetCategory();
+                
+                if (Wiki[i].GetStructure() == RadioButtonLinear.Text)
+                {
+                    setStructure(0);
+                }
+                else if (Wiki[i].GetStructure() == RadioButtonNonLinear.Text)
+                {
+                    setStructure(1);
+                }
+
+                TextBoxDefinition.Text = Wiki[i].GetDefinition();
+            }
+        }
+        // Programming Criteria 6.11 Part B
+        private void ListViewInfo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ListViewInfo.FocusedItem != null)
+            {
+                DisplayInformation(ListViewInfo.FocusedItem.Index);
             }
         }
     }
