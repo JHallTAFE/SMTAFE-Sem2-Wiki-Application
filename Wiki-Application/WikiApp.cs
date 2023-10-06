@@ -150,7 +150,7 @@ namespace Wiki_Application
                 DisplayInformation(ListViewInfo.FocusedItem.Index);
             }
         }
-
+        // Programming Criteria 6.8
         private void ButtonEdit_Click(object sender, EventArgs e)
         {
             // To-do: validate name inputs for duplicates and other validation checks
@@ -163,6 +163,37 @@ namespace Wiki_Application
                 Wiki[i].SetDefinition(TextBoxDefinition.Text);
                 DisplayWiki();
                 // To-do: clear boxes and status strip feedback
+            }
+        }
+        // Programming Criteria 6.10
+        private void ButtonSearch_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(TextBoxSearch.Text))
+            {
+                // Create Information object to search and compare with.
+                var searchInfo = new Information();
+                searchInfo.SetName(TextBoxSearch.Text);
+
+                var search = Wiki.BinarySearch(searchInfo);
+                if (search >= 0)
+                {
+                    DisplayInformation(search);
+                    // To-do: Status strip feedback
+                }
+                else
+                {
+                    // To-do: Status strip feedback
+                }
+            }
+            TextBoxSearch.Clear();
+        }
+        private void TextBoxSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSearch_Click(sender, e);
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
         }
     }

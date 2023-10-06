@@ -82,6 +82,7 @@
             TextBoxSearch.Name = "TextBoxSearch";
             TextBoxSearch.Size = new System.Drawing.Size(215, 23);
             TextBoxSearch.TabIndex = 1;
+            TextBoxSearch.KeyDown += TextBoxSearch_KeyDown;
             // 
             // ButtonSearch
             // 
@@ -91,6 +92,7 @@
             ButtonSearch.TabIndex = 2;
             ButtonSearch.Text = "Search";
             ButtonSearch.UseVisualStyleBackColor = true;
+            ButtonSearch.Click += ButtonSearch_Click;
             // 
             // TextBoxName
             // 

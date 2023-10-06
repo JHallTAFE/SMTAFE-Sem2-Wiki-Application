@@ -61,7 +61,7 @@ namespace Wiki_Application
         }
         public int CompareTo(Information info)
         {
-            return _name.CompareTo(info._name);
+            return String.Compare(_name, info.GetName(), true);
         }
     }
 }
