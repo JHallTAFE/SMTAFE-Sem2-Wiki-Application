@@ -221,6 +221,7 @@
             ButtonDelete.TabIndex = 14;
             ButtonDelete.Text = "Delete";
             ButtonDelete.UseVisualStyleBackColor = true;
+            ButtonDelete.Click += ButtonDelete_Click;
             // 
             // CheckBoxTitleCase
             // 

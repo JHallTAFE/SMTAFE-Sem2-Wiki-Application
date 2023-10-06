@@ -83,6 +83,7 @@ namespace Wiki_Application
                 MessageBox.Show("An error occured trying to open " + categoryList + "!");
             }
         }
+        // Programming Criteria 6.6 Part A
         private string GetStructure()
         {
             if (RadioButtonLinear.Checked)
@@ -95,12 +96,29 @@ namespace Wiki_Application
             }
             else return String.Empty;
         }
+        // Programming Criteria 6.6 Part B
         private void setStructure(int i)
         {
             switch (i)
             {
                 case 0: RadioButtonLinear.Checked = true; break;
                 case 1: RadioButtonNonLinear.Checked = true; break;
+            }
+        }
+        // Programming Criteria 6.7
+        private void ButtonDelete_Click(object sender, EventArgs e)
+        {
+            var selectedItem = ListViewInfo.FocusedItem.Index;
+
+            if (selectedItem >= 0)
+            {
+                if (MessageBox.Show("Do you wish to delete the entry " + Wiki[selectedItem].GetName()
+                    + " from the records?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Wiki.RemoveAt(selectedItem);
+                    DisplayWiki();
+                    // TO DO: Status Strip feedback
+                }
             }
         }
     }
