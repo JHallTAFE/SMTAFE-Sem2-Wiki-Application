@@ -15,7 +15,6 @@ namespace Wiki_Application
     {
         // Programming Criteria 6.2
         private List<Information> Wiki = new List<Information>();
-        const string categoryList = "categories.txt";
         public WikiApp()
         {
             InitializeComponent();
@@ -51,12 +50,15 @@ namespace Wiki_Application
         // Programming Criteria 6.4 Part A
         private void ComboBoxInit()
         {
+            const string categoryList = "categories.txt";
+
             if (!File.Exists(categoryList))
             {
                 // Initialise category.txt if it doesn't exist
                 using (StreamWriter writer = File.CreateText(categoryList))
                 {
                     string[] categories = { "Array", "List", "Tree", "Graphs", "Abstract", "Hash" };
+
                     foreach (string category in categories)
                     {
                         writer.WriteLine(category);
@@ -79,6 +81,26 @@ namespace Wiki_Application
             catch (Exception)
             {
                 MessageBox.Show("An error occured trying to open " + categoryList + "!");
+            }
+        }
+        private string GetStructure()
+        {
+            if (RadioButtonLinear.Checked)
+            {
+                return RadioButtonLinear.Text;
+            }
+            else if (RadioButtonNonLinear.Checked)
+            {
+                return RadioButtonNonLinear.Text;
+            }
+            else return String.Empty;
+        }
+        private void setStructure(int i)
+        {
+            switch (i)
+            {
+                case 0: RadioButtonLinear.Checked = true; break;
+                case 1: RadioButtonNonLinear.Checked = true; break;
             }
         }
     }
