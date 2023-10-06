@@ -213,6 +213,7 @@
             ButtonEdit.TabIndex = 13;
             ButtonEdit.Text = "Edit";
             ButtonEdit.UseVisualStyleBackColor = true;
+            ButtonEdit.Click += ButtonEdit_Click;
             // 
             // ButtonDelete
             // 

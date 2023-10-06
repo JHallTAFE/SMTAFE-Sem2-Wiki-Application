@@ -29,8 +29,7 @@ namespace Wiki_Application
             // To-do: Add input validation
             string name = TextBoxName.Text.ToString();
             string category = ComboBoxCategory.Text.ToString();
-            // To-do: Add logic for checking radio boxes, from Programming Criteria 6.6
-            string structure = "Placeholder";
+            string structure = GetStructure();
             string definition = TextBoxDefinition.Text.ToString();
             var newInfo = new Information(name, category, structure, definition);
             Wiki.Add(newInfo);
@@ -98,7 +97,7 @@ namespace Wiki_Application
             else return String.Empty;
         }
         // Programming Criteria 6.6 Part B
-        private void setStructure(int i)
+        private void SetStructure(int i)
         {
             switch (i)
             {
@@ -130,14 +129,14 @@ namespace Wiki_Application
             {
                 TextBoxName.Text = Wiki[i].GetName();
                 ComboBoxCategory.Text = Wiki[i].GetCategory();
-                
+
                 if (Wiki[i].GetStructure() == RadioButtonLinear.Text)
                 {
-                    setStructure(0);
+                    SetStructure(0);
                 }
                 else if (Wiki[i].GetStructure() == RadioButtonNonLinear.Text)
                 {
-                    setStructure(1);
+                    SetStructure(1);
                 }
 
                 TextBoxDefinition.Text = Wiki[i].GetDefinition();
@@ -149,6 +148,21 @@ namespace Wiki_Application
             if (ListViewInfo.FocusedItem != null)
             {
                 DisplayInformation(ListViewInfo.FocusedItem.Index);
+            }
+        }
+
+        private void ButtonEdit_Click(object sender, EventArgs e)
+        {
+            // To-do: validate name inputs for duplicates and other validation checks
+            if (ListViewInfo.FocusedItem != null)
+            {
+                var i = ListViewInfo.FocusedItem.Index;
+                Wiki[i].SetName(TextBoxName.Text);
+                Wiki[i].SetCategory(ComboBoxCategory.Text);
+                Wiki[i].SetStructure(GetStructure());
+                Wiki[i].SetDefinition(TextBoxDefinition.Text);
+                DisplayWiki();
+                // To-do: clear boxes and status strip feedback
             }
         }
     }
