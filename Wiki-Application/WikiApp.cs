@@ -37,7 +37,7 @@ namespace Wiki_Application
                 DisplayWiki();
             }
             else MessageBox.Show("Cannot add " + TextBoxName.Text + " as it already exists!");
-            // To-do: Clear boxes
+            Clear();
         }
         private void DisplayWiki()
         {
@@ -119,9 +119,9 @@ namespace Wiki_Application
                     + " from the records?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Wiki.RemoveAt(selectedItem);
+                    Clear();
                     DisplayWiki();
                     // TO DO: Status Strip feedback
-                    // Also clear boxes
                 }
             }
         }
@@ -157,17 +157,22 @@ namespace Wiki_Application
         private void ButtonEdit_Click(object sender, EventArgs e)
         {
             // To-do: validate name inputs for duplicates and other validation checks
-            if (ValidName(TextBoxName.Text))
+            if (ListViewInfo.FocusedItem != null)
             {
-                if (ListViewInfo.FocusedItem != null)
+                var i = ListViewInfo.FocusedItem.Index;
+                var oldName = Wiki[i].GetName();
+                var newName = TextBoxName.Text;
+
+                // If the name is not a duplicate OR if the matching name is from the entry being edited
+                if (ValidName(TextBoxName.Text) || String.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
                 {
-                    var i = ListViewInfo.FocusedItem.Index;
                     Wiki[i].SetName(TextBoxName.Text);
                     Wiki[i].SetCategory(ComboBoxCategory.Text);
                     Wiki[i].SetStructure(GetStructure());
                     Wiki[i].SetDefinition(TextBoxDefinition.Text);
                     DisplayWiki();
-                    // To-do: clear boxes and status strip feedback
+                    Clear();
+                    // To-do: Status strip feedback
                 }
             }
             else MessageBox.Show("Cannot change entry name to " + TextBoxName.Text + " as it already exists!");
@@ -211,6 +216,14 @@ namespace Wiki_Application
                 return false;
             }
             return true;
+        }
+        private void Clear()
+        {
+            TextBoxName.Clear();
+            ComboBoxCategory.Text = String.Empty;
+            RadioButtonLinear.Checked = false;
+            RadioButtonNonLinear.Checked = false;
+            TextBoxDefinition.Clear();
         }
     }
 }
