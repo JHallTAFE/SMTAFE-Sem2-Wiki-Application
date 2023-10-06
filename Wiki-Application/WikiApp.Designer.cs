@@ -101,6 +101,7 @@
             TextBoxName.Name = "TextBoxName";
             TextBoxName.Size = new System.Drawing.Size(121, 23);
             TextBoxName.TabIndex = 3;
+            TextBoxName.MouseDoubleClick += TextBoxName_MouseDoubleClick;
             // 
             // ButtonLoad
             // 
@@ -230,6 +231,8 @@
             // CheckBoxTitleCase
             // 
             CheckBoxTitleCase.AutoSize = true;
+            CheckBoxTitleCase.Checked = true;
+            CheckBoxTitleCase.CheckState = System.Windows.Forms.CheckState.Checked;
             CheckBoxTitleCase.Location = new System.Drawing.Point(12, 334);
             CheckBoxTitleCase.Name = "CheckBoxTitleCase";
             CheckBoxTitleCase.Size = new System.Drawing.Size(135, 19);

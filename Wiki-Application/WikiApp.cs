@@ -33,6 +33,10 @@ namespace Wiki_Application
                 string structure = GetStructure();
                 string definition = TextBoxDefinition.Text.ToString();
                 var newInfo = new Information(name, category, structure, definition);
+                if (CheckBoxTitleCase.Checked) // If auto-title case is checked
+                {
+                    newInfo.SetName(name, true);
+                }
                 Wiki.Add(newInfo);
                 DisplayWiki();
             }
@@ -156,7 +160,6 @@ namespace Wiki_Application
         // Programming Criteria 6.8
         private void ButtonEdit_Click(object sender, EventArgs e)
         {
-            // To-do: validate name inputs for duplicates and other validation checks
             if (ListViewInfo.FocusedItem != null)
             {
                 var i = ListViewInfo.FocusedItem.Index;
@@ -166,7 +169,7 @@ namespace Wiki_Application
                 // If the name is not a duplicate OR if the matching name is from the entry being edited
                 if (ValidName(TextBoxName.Text) || String.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
                 {
-                    Wiki[i].SetName(TextBoxName.Text);
+                    Wiki[i].SetName(TextBoxName.Text, CheckBoxTitleCase.Checked); // Title case if the box is checked
                     Wiki[i].SetCategory(ComboBoxCategory.Text);
                     Wiki[i].SetStructure(GetStructure());
                     Wiki[i].SetDefinition(TextBoxDefinition.Text);
@@ -217,6 +220,7 @@ namespace Wiki_Application
             }
             return true;
         }
+        // Programming Criteria 6.12 Part A
         private void Clear()
         {
             TextBoxName.Clear();
@@ -224,6 +228,11 @@ namespace Wiki_Application
             RadioButtonLinear.Checked = false;
             RadioButtonNonLinear.Checked = false;
             TextBoxDefinition.Clear();
+        }
+        // Programming Criteria 6.12 Part B
+        private void TextBoxName_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Clear();
         }
     }
 }

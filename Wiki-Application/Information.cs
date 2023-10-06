@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Wiki_Application
 {
     // Programming Criteria 6.1
-    public class Information : IComparable<Information>
+    public class Information : IComparable<Information>//, ISerializable
     {
         private string _name;
         private string _category;
@@ -36,6 +38,20 @@ namespace Wiki_Application
         public void SetName(string name)
         {
             _name = name;
+        }
+        /// <summary>
+        /// Overloaded name setter that title cases the input if given a true input.
+        /// </summary>
+        /// <param name="name">Name to set the field to.</param>
+        /// <param name="titleCase">Whether to title case the input.</param>
+        public void SetName(string name, bool titleCase)
+        {
+            if (titleCase)
+            {
+                TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
+                name = ti.ToTitleCase(name);
+            }
+            SetName(name);
         }
         public string GetCategory() {
             return _category;
