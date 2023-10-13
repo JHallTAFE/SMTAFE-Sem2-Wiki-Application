@@ -8,7 +8,7 @@ using System.Text;
 namespace Wiki_Application
 {
     // Programming Criteria 6.1
-    public class Information : IComparable<Information>//, ISerializable
+    public class Information : IComparable<Information>
     {
         private string _name;
         private string _category;
@@ -30,7 +30,7 @@ namespace Wiki_Application
             _structure = structure;
             _definition = definition;
         }
-
+        #region getter setter
         public string GetName()
         {
             return _name;
@@ -75,6 +75,7 @@ namespace Wiki_Application
         public void SetDefinition(string definition) {
             _definition = definition;
         }
+        #endregion
         public int CompareTo(Information info)
         {
             return String.Compare(_name, info.GetName(), true);

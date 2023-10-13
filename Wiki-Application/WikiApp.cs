@@ -28,17 +28,20 @@ namespace Wiki_Application
         {
             if (ValidName(TextBoxName.Text))
             {
-                string name = TextBoxName.Text.ToString();
-                string category = ComboBoxCategory.Text.ToString();
-                string structure = GetStructure();
-                string definition = TextBoxDefinition.Text.ToString();
-                var newInfo = new Information(name, category, structure, definition);
-                if (CheckBoxTitleCase.Checked) // If auto-title case is checked
+                var newInfo = new Information();
+                try
                 {
-                    newInfo.SetName(name, true);
+                    newInfo.SetName(TextBoxName.Text, CheckBoxTitleCase.Checked);
+                    newInfo.SetCategory(ComboBoxCategory.Text);
+                    newInfo.SetStructure(GetStructure());
+                    newInfo.SetDefinition(TextBoxDefinition.Text);
+                    Wiki.Add(newInfo);
+                    DisplayWiki();
                 }
-                Wiki.Add(newInfo);
-                DisplayWiki();
+                catch (Exception)
+                {
+                    // To-Do: add user feedback
+                }
             }
             else MessageBox.Show("Cannot add " + TextBoxName.Text + " as it already exists!");
             Clear();
@@ -62,14 +65,21 @@ namespace Wiki_Application
             if (!File.Exists(categoryList))
             {
                 // Initialise category.txt if it doesn't exist
-                using (StreamWriter writer = File.CreateText(categoryList))
+                try
                 {
-                    string[] categories = { "Array", "List", "Tree", "Graphs", "Abstract", "Hash" };
-
-                    foreach (string category in categories)
+                    using (StreamWriter writer = File.CreateText(categoryList))
                     {
-                        writer.WriteLine(category);
+                        string[] categories = { "Array", "List", "Tree", "Graphs", "Abstract", "Hash" };
+
+                        foreach (string category in categories)
+                        {
+                            writer.WriteLine(category);
+                        }
                     }
+                }
+                catch (Exception)
+                {
+
                 }
             }
             try
@@ -220,7 +230,8 @@ namespace Wiki_Application
             }
             return true;
         }
-        // Programming Criteria 6.12 Part A
+
+        // Programming Criteria 6.12
         private void Clear()
         {
             TextBoxName.Clear();
@@ -229,10 +240,110 @@ namespace Wiki_Application
             RadioButtonNonLinear.Checked = false;
             TextBoxDefinition.Clear();
         }
-        // Programming Criteria 6.12 Part B
+
+        // Programming Criteria 6.13
         private void TextBoxName_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Clear();
+        }
+        // Programming Criteria 6.14 Part A
+        private void SaveFile()
+        {
+            try
+            {
+                using (SaveFileDialog saveFile = new SaveFileDialog())
+                {
+                    saveFile.Title = "Select a file to save to";
+                    saveFile.Filter = "Binary Files|*.dat";
+                    saveFile.InitialDirectory = Environment.CurrentDirectory;
+
+                    if (saveFile.ShowDialog() == DialogResult.OK)
+                    {
+                        string fileName = saveFile.FileName;
+                        try
+                        {
+                            using (var bw = new BinaryWriter(new FileStream(fileName, FileMode.Create)))
+                            {
+                                foreach (var info in Wiki)
+                                {
+                                    bw.Write(info.GetName());
+                                    bw.Write(info.GetCategory());
+                                    bw.Write(info.GetStructure());
+                                    bw.Write(info.GetDefinition());
+                                }
+                                // To-do: User feedback
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // To-do: User feedback
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // To-do: User feedback
+            }
+        }
+        // Programming Criteria Part B
+        private void OpenFile()
+        {
+            try
+            {
+                using (var openFile = new OpenFileDialog())
+                {
+                    openFile.Title = "Select a file to open";
+                    openFile.Filter = "Binary Files|*.dat";
+                    openFile.InitialDirectory = Environment.CurrentDirectory;
+
+                    if (openFile.ShowDialog() == DialogResult.OK)
+                    {
+                        string fileName = openFile.FileName;
+                        try
+                        {
+                            using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
+                            {
+                                while (br.BaseStream.Position < br.BaseStream.Length)
+                                {
+                                    try
+                                    {
+                                        var newInfo = new Information();
+                                        newInfo.SetName(br.ReadString());
+                                        newInfo.SetCategory(br.ReadString());
+                                        newInfo.SetStructure(br.ReadString());
+                                        newInfo.SetDefinition(br.ReadString());
+                                        Wiki.Add(newInfo);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        // To-do: User feedback
+                                    }
+                                }
+                                DisplayWiki();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // To-do: User feedback
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // To-do: User feedback
+            }
+        }
+        // Programming Criteria Part C
+        private void ButtonSave_Click(object sender, EventArgs e)
+        {
+            SaveFile();
+        }
+        // Programming Criteria Part D
+        private void ButtonOpen_Click(object sender, EventArgs e)
+        {
+            OpenFile();
         }
     }
 }

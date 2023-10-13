@@ -34,7 +34,7 @@
             TextBoxSearch = new System.Windows.Forms.TextBox();
             ButtonSearch = new System.Windows.Forms.Button();
             TextBoxName = new System.Windows.Forms.TextBox();
-            ButtonLoad = new System.Windows.Forms.Button();
+            ButtonOpen = new System.Windows.Forms.Button();
             ButtonSave = new System.Windows.Forms.Button();
             ComboBoxCategory = new System.Windows.Forms.ComboBox();
             GroupBoxStructure = new System.Windows.Forms.GroupBox();
@@ -103,14 +103,15 @@
             TextBoxName.TabIndex = 3;
             TextBoxName.MouseDoubleClick += TextBoxName_MouseDoubleClick;
             // 
-            // ButtonLoad
+            // ButtonOpen
             // 
-            ButtonLoad.Location = new System.Drawing.Point(281, 334);
-            ButtonLoad.Name = "ButtonLoad";
-            ButtonLoad.Size = new System.Drawing.Size(75, 23);
-            ButtonLoad.TabIndex = 4;
-            ButtonLoad.Text = "Load";
-            ButtonLoad.UseVisualStyleBackColor = true;
+            ButtonOpen.Location = new System.Drawing.Point(281, 334);
+            ButtonOpen.Name = "ButtonOpen";
+            ButtonOpen.Size = new System.Drawing.Size(75, 23);
+            ButtonOpen.TabIndex = 4;
+            ButtonOpen.Text = "Open";
+            ButtonOpen.UseVisualStyleBackColor = true;
+            ButtonOpen.Click += ButtonOpen_Click;
             // 
             // ButtonSave
             // 
@@ -120,6 +121,7 @@
             ButtonSave.TabIndex = 5;
             ButtonSave.Text = "Save";
             ButtonSave.UseVisualStyleBackColor = true;
+            ButtonSave.Click += ButtonSave_Click;
             // 
             // ComboBoxCategory
             // 
@@ -256,7 +258,7 @@
             Controls.Add(GroupBoxStructure);
             Controls.Add(ComboBoxCategory);
             Controls.Add(ButtonSave);
-            Controls.Add(ButtonLoad);
+            Controls.Add(ButtonOpen);
             Controls.Add(TextBoxName);
             Controls.Add(ButtonSearch);
             Controls.Add(TextBoxSearch);
@@ -282,7 +284,7 @@
         private System.Windows.Forms.ColumnHeader columnName;
         private System.Windows.Forms.ColumnHeader columnCategory;
         private System.Windows.Forms.TextBox TextBoxName;
-        private System.Windows.Forms.Button ButtonLoad;
+        private System.Windows.Forms.Button ButtonOpen;
         private System.Windows.Forms.Button ButtonSave;
         private System.Windows.Forms.ComboBox ComboBoxCategory;
         private System.Windows.Forms.GroupBox GroupBoxStructure;
