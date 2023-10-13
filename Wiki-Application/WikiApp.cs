@@ -286,7 +286,7 @@ namespace Wiki_Application
                 // To-do: User feedback
             }
         }
-        // Programming Criteria Part B
+        // Programming Criteria 6.14 Part B
         private void OpenFile()
         {
             try
@@ -304,6 +304,7 @@ namespace Wiki_Application
                         {
                             using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                             {
+                                Wiki.Clear();
                                 while (br.BaseStream.Position < br.BaseStream.Length)
                                 {
                                     try
@@ -335,15 +336,30 @@ namespace Wiki_Application
                 // To-do: User feedback
             }
         }
-        // Programming Criteria Part C
+        // Programming Criteria 6.14 Part C
         private void ButtonSave_Click(object sender, EventArgs e)
         {
             SaveFile();
         }
-        // Programming Criteria Part D
+        // Programming Criteria 6.14 Part D
         private void ButtonOpen_Click(object sender, EventArgs e)
         {
             OpenFile();
+        }
+        // Programming Criteria 6.15
+        private void WikiApp_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //if (MessageBox.Show("Do you wish to save ", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //{
+
+            //}
+        }
+
+        private void TextBoxName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Only allow spaces, alphabetical letters, and backspace
+            bool isValid = char.IsWhiteSpace(e.KeyChar) || char.IsLetter(e.KeyChar) || e.KeyChar == (char)Keys.Back;
+            e.Handled = !isValid;
         }
     }
 }

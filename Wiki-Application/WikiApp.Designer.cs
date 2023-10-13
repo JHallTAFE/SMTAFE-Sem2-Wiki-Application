@@ -101,6 +101,7 @@
             TextBoxName.Name = "TextBoxName";
             TextBoxName.Size = new System.Drawing.Size(121, 23);
             TextBoxName.TabIndex = 3;
+            TextBoxName.KeyPress += TextBoxName_KeyPress;
             TextBoxName.MouseDoubleClick += TextBoxName_MouseDoubleClick;
             // 
             // ButtonOpen
@@ -269,6 +270,7 @@
             Name = "WikiApp";
             SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             Text = "Wiki Application";
+            FormClosing += WikiApp_FormClosing;
             Load += WikiApp_Load;
             GroupBoxStructure.ResumeLayout(false);
             GroupBoxStructure.PerformLayout();
