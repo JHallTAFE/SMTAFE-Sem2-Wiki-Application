@@ -46,6 +46,9 @@ namespace Wiki_Application
             else MessageBox.Show("Cannot add " + TextBoxName.Text + " as it already exists!");
             Clear();
         }
+        /// <summary>
+        /// Sorts the list and then displays it in the ListView
+        /// </summary>
         private void DisplayWiki()
         {
             Wiki.Sort();
@@ -58,6 +61,10 @@ namespace Wiki_Application
             }
         }
         // Programming Criteria 6.4 Part A
+        /// <summary>
+        /// Initalises the ComboBox with categories from a text file.
+        /// Creates the text file and populates it if it doesn't already exist.
+        /// </summary>
         private void ComboBoxInit()
         {
             const string categoryList = "categories.txt";
@@ -101,6 +108,10 @@ namespace Wiki_Application
             }
         }
         // Programming Criteria 6.6 Part A
+        /// <summary>
+        /// Gets the checked radio button in the form.
+        /// </summary>
+        /// <returns>"Linear", "Non-Linear", or an empty string depending on which radio button is checked or if neither are.</returns>
         private string GetStructure()
         {
             if (RadioButtonLinear.Checked)
@@ -114,6 +125,10 @@ namespace Wiki_Application
             else return String.Empty;
         }
         // Programming Criteria 6.6 Part B
+        /// <summary>
+        /// Sets the given radio button to be cheecked.
+        /// </summary>
+        /// <param name="i">0 checks Linear, 1 checks Non-Linear</param>
         private void SetStructure(int i)
         {
             switch (i)
@@ -140,6 +155,10 @@ namespace Wiki_Application
             }
         }
         // Programming Criteria 6.11 Part A
+        /// <summary>
+        /// Populates the relevant boxes and button with the given entry in the list, if the entry exists.
+        /// </summary>
+        /// <param name="i">The index of the entry to populate the fields with.</param>
         private void DisplayInformation(int i)
         {
             if (0 <= i && i < Wiki.Count) // If input in range of List<>
@@ -162,6 +181,7 @@ namespace Wiki_Application
         // Programming Criteria 6.11 Part B
         private void ListViewInfo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // If the index changes, either through clicking or arrow keys to navigate
             if (ListViewInfo.FocusedItem != null)
             {
                 DisplayInformation(ListViewInfo.FocusedItem.Index);
@@ -170,7 +190,7 @@ namespace Wiki_Application
         // Programming Criteria 6.8
         private void ButtonEdit_Click(object sender, EventArgs e)
         {
-            if (ListViewInfo.FocusedItem != null)
+            if (ListViewInfo.FocusedItem != null) // If there's something selected to edit
             {
                 var i = ListViewInfo.FocusedItem.Index;
                 var oldName = Wiki[i].GetName();
@@ -200,7 +220,7 @@ namespace Wiki_Application
                 searchInfo.SetName(TextBoxSearch.Text);
 
                 var search = Wiki.BinarySearch(searchInfo);
-                if (search >= 0)
+                if (search >= 0) // If the search was successful
                 {
                     DisplayInformation(search);
                     // To-do: Status strip feedback
@@ -211,9 +231,11 @@ namespace Wiki_Application
                 }
             }
             TextBoxSearch.Clear();
+            TextBoxName.Focus();
         }
         private void TextBoxSearch_KeyDown(object sender, KeyEventArgs e)
         {
+            // Lets the Enter key initiate a search as if the button were clicked
             if (e.KeyCode == Keys.Enter)
             {
                 ButtonSearch_Click(sender, e);
@@ -222,6 +244,11 @@ namespace Wiki_Application
             }
         }
         // Programming Criteria 6.5
+        /// <summary>
+        /// Checks to see if a given name has a corresponding entry in the list already, case-insensitive.
+        /// </summary>
+        /// <param name="input">Name to validate.</param>
+        /// <returns>True if no such entry exists, false if it exists already.</returns>
         private bool ValidName(string input)
         {
             if (Wiki.Exists(info => info.GetName().Equals(input, StringComparison.OrdinalIgnoreCase)))
@@ -232,6 +259,9 @@ namespace Wiki_Application
         }
 
         // Programming Criteria 6.12
+        /// <summary>
+        /// Clears the input fields.
+        /// </summary>
         private void Clear()
         {
             TextBoxName.Clear();
@@ -247,6 +277,9 @@ namespace Wiki_Application
             Clear();
         }
         // Programming Criteria 6.14 Part A
+        /// <summary>
+        /// Prompts the user to save the list to a file.
+        /// </summary>
         private void SaveFile()
         {
             try
@@ -287,6 +320,9 @@ namespace Wiki_Application
             }
         }
         // Programming Criteria 6.14 Part B
+        /// <summary>
+        /// Prompts the user to open information from a file.
+        /// </summary>
         private void OpenFile()
         {
             try
