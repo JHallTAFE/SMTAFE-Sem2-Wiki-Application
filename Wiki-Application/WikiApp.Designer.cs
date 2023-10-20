@@ -50,7 +50,10 @@
             ButtonDelete = new System.Windows.Forms.Button();
             CheckBoxTitleCase = new System.Windows.Forms.CheckBox();
             ToolTip = new System.Windows.Forms.ToolTip(components);
+            StatusStrip = new System.Windows.Forms.StatusStrip();
+            StatusBar = new System.Windows.Forms.ToolStripStatusLabel();
             GroupBoxStructure.SuspendLayout();
+            StatusStrip.SuspendLayout();
             SuspendLayout();
             // 
             // ListViewInfo
@@ -259,11 +262,26 @@
             ToolTip.SetToolTip(CheckBoxTitleCase, "If checked, this will automatically title case names added to the list.");
             CheckBoxTitleCase.UseVisualStyleBackColor = true;
             // 
+            // StatusStrip
+            // 
+            StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { StatusBar });
+            StatusStrip.Location = new System.Drawing.Point(0, 369);
+            StatusStrip.Name = "StatusStrip";
+            StatusStrip.Size = new System.Drawing.Size(589, 22);
+            StatusStrip.TabIndex = 16;
+            StatusStrip.Text = "statusStrip1";
+            // 
+            // StatusBar
+            // 
+            StatusBar.Name = "StatusBar";
+            StatusBar.Size = new System.Drawing.Size(0, 17);
+            // 
             // WikiApp
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(589, 369);
+            ClientSize = new System.Drawing.Size(589, 391);
+            Controls.Add(StatusStrip);
             Controls.Add(CheckBoxTitleCase);
             Controls.Add(ButtonDelete);
             Controls.Add(ButtonEdit);
@@ -290,6 +308,8 @@
             Load += WikiApp_Load;
             GroupBoxStructure.ResumeLayout(false);
             GroupBoxStructure.PerformLayout();
+            StatusStrip.ResumeLayout(false);
+            StatusStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -317,6 +337,8 @@
         private System.Windows.Forms.Button ButtonDelete;
         private System.Windows.Forms.CheckBox CheckBoxTitleCase;
         private System.Windows.Forms.ToolTip ToolTip;
+        private System.Windows.Forms.StatusStrip StatusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel StatusBar;
     }
 }
 

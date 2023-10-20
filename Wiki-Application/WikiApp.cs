@@ -22,11 +22,32 @@ namespace Wiki_Application
         private void WikiApp_Load(object sender, EventArgs e)
         {
             ComboBoxInit(); // Programming Criteria 6.4 Part B
+            ButtonSave.Enabled = false;
         }
         // Programming Criteria 6.3
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
-            if (ValidName(TextBoxName.Text))
+            if (String.IsNullOrWhiteSpace(TextBoxName.Text))
+            {
+                MessageBox.Show("Please fill in a name for the entry.");
+            }
+            else if (String.IsNullOrWhiteSpace(ComboBoxCategory.Text))
+            {
+                MessageBox.Show("Please select a category for the entry.");
+            }
+            else if (String.IsNullOrEmpty(GetStructure()))
+            {
+                MessageBox.Show("Please select a structure for the entry.");
+            }
+            else if (String.IsNullOrEmpty(TextBoxDefinition.Text))
+            {
+                MessageBox.Show("Please fill in a definition for the entry.");
+            }
+            else if(!ValidName(TextBoxName.Text))
+            {
+                MessageBox.Show("Cannot add " + TextBoxName.Text + " as it already exists!");
+            }
+            else
             {
                 var newInfo = new Information();
                 try
@@ -36,16 +57,18 @@ namespace Wiki_Application
                     newInfo.SetStructure(GetStructure());
                     newInfo.SetDefinition(TextBoxDefinition.Text);
                     Wiki.Add(newInfo);
+                    Clear();
                     DisplayWiki();
+                    ButtonSave.Enabled = true;
+                    StatusBar.Text = "Successfully added entry " + newInfo.GetName() + "!";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // To-Do: add user feedback
+                    StatusBar.Text = "Could not add entry to the list: " + ex.Message;
                 }
             }
-            else MessageBox.Show("Cannot add " + TextBoxName.Text + " as it already exists!");
-            Clear();
         }
+        // Programming Criteria 6.9
         /// <summary>
         /// Sorts the list and then displays it in the ListView
         /// </summary>
@@ -147,10 +170,15 @@ namespace Wiki_Application
                 if (MessageBox.Show("Do you wish to delete the entry " + Wiki[selectedItem].GetName()
                     + " from the records?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
+                    var name = Wiki[selectedItem].GetName();
                     Wiki.RemoveAt(selectedItem);
                     Clear();
                     DisplayWiki();
-                    // TO DO: Status Strip feedback
+                    if (Wiki.Count == 0)
+                    {
+                        ButtonSave.Enabled = false;
+                    }
+                    StatusBar.Text = "Successfully deleted entry " + name + "!";
                 }
             }
         }
@@ -195,9 +223,10 @@ namespace Wiki_Application
                 var i = ListViewInfo.FocusedItem.Index;
                 var oldName = Wiki[i].GetName();
                 var newName = TextBoxName.Text;
+                bool namesEqual = String.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase);
 
                 // If the name is not a duplicate OR if the matching name is from the entry being edited
-                if (ValidName(TextBoxName.Text) || String.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
+                if (ValidName(TextBoxName.Text) || namesEqual)
                 {
                     Wiki[i].SetName(TextBoxName.Text, CheckBoxTitleCase.Checked); // Title case if the box is checked
                     Wiki[i].SetCategory(ComboBoxCategory.Text);
@@ -205,7 +234,8 @@ namespace Wiki_Application
                     Wiki[i].SetDefinition(TextBoxDefinition.Text);
                     DisplayWiki();
                     Clear();
-                    // To-do: Status strip feedback
+                    if (namesEqual) StatusBar.Text = "Successfully edited entry " + oldName + "!";
+                    else StatusBar.Text = "Successfully edited entry " + oldName + " to " + newName + "!";
                 }
             }
             else MessageBox.Show("Cannot change entry name to " + TextBoxName.Text + " as it already exists!");
@@ -222,12 +252,13 @@ namespace Wiki_Application
                 var search = Wiki.BinarySearch(searchInfo);
                 if (search >= 0) // If the search was successful
                 {
+                    ListViewInfo.Items[search].Selected = true;
+                    StatusBar.Text = "Found " + TextBoxSearch.Text + " at position " + (search + 1) + "!";
                     DisplayInformation(search);
-                    // To-do: Status strip feedback
                 }
                 else
                 {
-                    // To-do: Status strip feedback
+                    StatusBar.Text = "Could not find " + TextBoxSearch.Text + " in the list!";
                 }
             }
             TextBoxSearch.Clear();
@@ -304,19 +335,20 @@ namespace Wiki_Application
                                     bw.Write(info.GetStructure());
                                     bw.Write(info.GetDefinition());
                                 }
-                                // To-do: User feedback
+                                FileInfo fi = new FileInfo(fileName);
+                                StatusBar.Text = String.Format("Successfully saved to {0}.", fi.Name);
                             }
                         }
                         catch (Exception ex)
                         {
-                            // To-do: User feedback
+                            MessageBox.Show(ex.Message);
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // To-do: User feedback
+                MessageBox.Show(ex.Message);
             }
         }
         // Programming Criteria 6.14 Part B
@@ -354,22 +386,25 @@ namespace Wiki_Application
                                     }
                                     catch (Exception)
                                     {
-                                        // To-do: User feedback
+
                                     }
                                 }
                                 DisplayWiki();
+                                FileInfo fi = new FileInfo(fileName);
+                                StatusBar.Text = String.Format("Successfully read contents of {0}.", fi.Name);
+                                ButtonSave.Enabled = true;
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            // To-do: User feedback
+                            MessageBox.Show(ex.Message);
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // To-do: User feedback
+                MessageBox.Show(ex.Message);
             }
         }
         // Programming Criteria 6.14 Part C
