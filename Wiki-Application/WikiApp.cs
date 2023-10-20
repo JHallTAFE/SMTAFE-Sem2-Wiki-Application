@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace Wiki_Application
 {
@@ -420,10 +421,31 @@ namespace Wiki_Application
         // Programming Criteria 6.15
         private void WikiApp_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (MessageBox.Show("Do you wish to save ", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            //{
+            if (MessageBox.Show("Do you wish to save your progress?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                SaveFile();
+            }
+            else if (Wiki.Count > 0)
+            {
+                try
+                {
+                    // Save to temp.dat because the wiki application WILL save data when the form closes.
+                    using (var bw = new BinaryWriter(new FileStream(Application.StartupPath + "\\temp.dat", FileMode.Create)))
+                    {
+                        foreach (var info in Wiki)
+                        {
+                            bw.Write(info.GetName());
+                            bw.Write(info.GetCategory());
+                            bw.Write(info.GetStructure());
+                            bw.Write(info.GetDefinition());
+                        }
+                    }
+                }
+                catch (Exception)
+                {
 
-            //}
+                }
+            }
         }
 
         private void TextBoxName_KeyPress(object sender, KeyPressEventArgs e)
