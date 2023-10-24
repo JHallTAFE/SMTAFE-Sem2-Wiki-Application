@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace Wiki_Application
                 var newInfo = new Information();
                 try
                 {
-                    newInfo.SetName(TextBoxName.Text, CheckBoxTitleCase.Checked);
+                    newInfo.SetName(TextBoxName.Text.Trim(), CheckBoxTitleCase.Checked);
                     newInfo.SetCategory(ComboBoxCategory.Text);
                     newInfo.SetStructure(GetStructure());
                     newInfo.SetDefinition(TextBoxDefinition.Text);
@@ -172,6 +173,7 @@ namespace Wiki_Application
                     + " from the records?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     var name = Wiki[selectedItem].GetName();
+                    Trace.TraceInformation("Deleting {0} at index {1}.", name, selectedItem);
                     Wiki.RemoveAt(selectedItem);
                     Clear();
                     DisplayWiki();
@@ -180,6 +182,10 @@ namespace Wiki_Application
                         ButtonSave.Enabled = false;
                     }
                     StatusBar.Text = "Successfully deleted entry " + name + "!";
+                }
+                else
+                {
+                    Trace.TraceInformation("User aborted the delete operation.");
                 }
             }
         }
@@ -222,24 +228,27 @@ namespace Wiki_Application
             if (ListViewInfo.FocusedItem != null) // If there's something selected to edit
             {
                 var i = ListViewInfo.FocusedItem.Index;
-                var oldName = Wiki[i].GetName();
-                var newName = TextBoxName.Text;
+                var oldName = Wiki[i].GetName().Trim();
+                var newName = TextBoxName.Text.Trim();
                 bool namesEqual = String.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase);
+                Trace.TraceInformation("Editing index {0}.\nOriginal name: {1}\nNew name: {2}\nNames are equivalent?: {3}", i, oldName, newName, namesEqual);
 
                 // If the name is not a duplicate OR if the matching name is from the entry being edited
                 if (ValidName(TextBoxName.Text) || namesEqual)
                 {
-                    Wiki[i].SetName(TextBoxName.Text, CheckBoxTitleCase.Checked); // Title case if the box is checked
+                    Wiki[i].SetName(newName, CheckBoxTitleCase.Checked); // Title case if the box is checked
                     Wiki[i].SetCategory(ComboBoxCategory.Text);
                     Wiki[i].SetStructure(GetStructure());
                     Wiki[i].SetDefinition(TextBoxDefinition.Text);
                     DisplayWiki();
                     Clear();
                     if (namesEqual) StatusBar.Text = "Successfully edited entry " + oldName + "!";
-                    else StatusBar.Text = "Successfully edited entry " + oldName + " to " + newName + "!";
+                    else StatusBar.Text = "Successfully edited entry " + oldName + " to " + Wiki[i].GetName() + "!";
+                    Trace.TraceInformation("Edit was successful. No other duplicate entry existed.");
                 }
+                else MessageBox.Show("Cannot change entry name to " + newName + " as it already exists!");
             }
-            else MessageBox.Show("Cannot change entry name to " + TextBoxName.Text + " as it already exists!");
+            else MessageBox.Show("Cannot change entry name to " + TextBoxName.Text.Trim() + " as it already exists!");
         }
         // Programming Criteria 6.10
         private void ButtonSearch_Click(object sender, EventArgs e)
@@ -248,18 +257,18 @@ namespace Wiki_Application
             {
                 // Create Information object to search and compare with.
                 var searchInfo = new Information();
-                searchInfo.SetName(TextBoxSearch.Text);
+                searchInfo.SetName(TextBoxSearch.Text.Trim());
 
                 var search = Wiki.BinarySearch(searchInfo);
                 if (search >= 0) // If the search was successful
                 {
                     ListViewInfo.Items[search].Selected = true;
-                    StatusBar.Text = "Found " + TextBoxSearch.Text + " at position " + (search + 1) + "!";
+                    StatusBar.Text = "Found " + Wiki[search].GetName() + " at position " + (search + 1) + "!";
                     DisplayInformation(search);
                 }
                 else
                 {
-                    StatusBar.Text = "Could not find " + TextBoxSearch.Text + " in the list!";
+                    StatusBar.Text = "Could not find " + searchInfo.GetName() + " in the list!";
                 }
             }
             TextBoxSearch.Clear();
@@ -283,10 +292,14 @@ namespace Wiki_Application
         /// <returns>True if no such entry exists, false if it exists already.</returns>
         private bool ValidName(string input)
         {
-            if (Wiki.Exists(info => info.GetName().Equals(input, StringComparison.OrdinalIgnoreCase)))
+            input = input.Trim();
+            Trace.TraceInformation("Comparing {0} against the list:", input);
+            if (Wiki.Exists(info => info.GetName().Trim().Equals(input, StringComparison.OrdinalIgnoreCase)))
             {
+                Trace.TraceInformation("{0} exists in the list. ValidName False.", input);
                 return false;
             }
+            Trace.TraceInformation("{0} does not exist in the list. ValidName True.", input);
             return true;
         }
 
